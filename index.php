@@ -14,39 +14,40 @@
             margin: 0;
             padding: 0;
         }
-
-    
     </style>
 </head>
-<body class = "bg-light">
-    <div class="container-fluid bg-primary text-white text-center py-5">
-        <h1 class="display-1 text-center">Bienvenido</h1>
-        
+<body class="bg-light">
+
+<?php include('navbar.php')?>
+
+<div class="container-fluid bg-danger text-white text-center py-5">
+    <h1 class="display-1 text-center">Bienvenido</h1>
+</div>
+
+<div class="container px-4">
+    <div class="row gx-5">
+        <p class="lead border bg-light">
+            <?php
+            // Número de tarjetas que quieres imprimir
+            $numTarjetas = 10;
+
+            for ($i = 0; $i < $numTarjetas; $i++) {
+                include('cards.php');
+            }
+            ?>
+        </p>
     </div>
-<div class = "container px-4">
-  <div class="row gx-5">
-<p class="lead border bg-light"><small> ¡Te damos la bienvenida a ConectaPro, el lugar donde las conexiones 
-  profesionales cobran vida! En un mundo laboral en constante evolución, 
-  la necesidad de conectarse de manera efectiva con profesionales competentes es 
-  esencial. ConectaPro ha sido creado con la visión de simplificar y mejorar la 
-  forma en que profesionales y usuarios se encuentran, colaboran y prosperan. </small></p>
-
 </div>
 
+<div class="container-fluid text-center">
+    <button type="button" id="entrar" class="btn btn-primary btn-lg">Iniciar sesión</button>
 </div>
-<div class = "container px-4">
-  <div class="row gx-5">
-  <img src="https://cdn.milenio.com/uploads/media/2017/07/21/profesionistas-empleados-meses-egreso-estudiaron.jpeg" class="img-fluid" alt="...">
-</div>
-    <div class="container-fluid text-center">
-        <button type="button" id="entrar" class="btn btn-primary btn-lg">Iniciar sesión</button>
-    </div>
-    <script>
-     document.getElementById('entrar').addEventListener('click', function() {
-    window.open('https://www.youtube.com', '_blank');
-});
-    </script>
 
-    
+<script>
+    document.getElementById('entrar').addEventListener('click', function() {
+        window.open('login.php', '_blank');
+    });
+</script>
+
 </body>
 </html>

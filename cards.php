@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        img:hover{
+
+          transform: scale(1.6);
+          transition: 1s;
+        }
+
+        .click-to-zoom {
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .click-to-zoom.enlarged {
+            transform: scale(1.5); /* Ajusta el factor de escala según tu preferencia */
+        }
+    </style>
+    <title>ConectPro</title>
+</head>
+<body>
+
+<div class="container ml-2">
+    <div class="card border-dark mb-2">
+        <div class="card-body d-flex">
+            <div class="mr-2">
+                <img class="rounded-circle img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Foto_Perfil_.jpg" alt="Foto de perfil" style="max-width: 150px; max-height: 150px;">
+            </div>
+            <div class="ml-2">
+                <h5 class="card-title">Nombre</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Profesión</h6>
+                <p class="card-text">Descripción de la persona</p>
+                
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mb-2">
+            <a href="#" class="btn btn-primary">Contratar</a>
+        </div>
+        <!-- Logo Profesionista -->
+        <div class="ml-auto" style="ml-auto mr-2 d-flex">
+    <img class="rounded-circle img-fluid logo-profesional" src="" alt="Logo del profesional" style="max-width: 75px; max-height: 75px;">
+</div>
+
+
+        <div class="text-center">
+            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px; margin-lefth: 20px;">
+            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
+            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
+            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Asegúrate de incluir jQuery antes de este script -->
+<script>
+    $(document).ready(function() {
+        // Utiliza PHP para obtener la profesión del profesional desde la base de datos
+        <?php
+            // Conecta a la base de datos (asegúrate de manejar las conexiones de forma segura)
+            $conexion=new mysqli("localhost", "usuariodb", "", "id21883336_conectpro", "3306"); 
+
+            // Verifica la conexión
+            if ($conexion->connect_error) {
+                die("La conexión a la base de datos ha fallado: " . $conexion->connect_error);
+            }
+
+            // Ejecuta la consulta para obtener la profesión del profesional
+            $profesionistaID = 1; // Reemplaza esto con el ID del profesional actual
+            $consulta = "SELECT Profesion FROM profesionistas WHERE ProfesionistaID = $profesionistaID";
+            $resultado = $conexion->query($consulta);
+
+            // Verifica si se obtuvo un resultado
+            if ($resultado->num_rows > 0) {
+                $fila = $resultado->fetch_assoc();
+                $profesion = $fila['Profesion'];
+
+                // Imprime la profesión como variable de JavaScript
+                echo "var profesion = '$profesion';";
+            }
+
+            // Cierra la conexión
+            $conexion->close();
+        ?>
+
+        // Switch para establecer la imagen del logo según la profesión
+        switch (profesion) {
+            case "plomero":
+                $(".logo-profesional").attr("src", "https://images.vexels.com/media/users/3/129025/isolated/preview/1ff74bbbb9d5e2e296811ba970f2bbfe-simbolo-del-grifo-de-agua-svg.png");
+                break;
+            // Agrega más casos según las profesiones que desees manejar
+        }
+
+        // Agrega el código para el evento click-to-zoom aquí
+        $('.click-to-zoom').click(function() {
+            $(this).toggleClass('enlarged');
+        });
+    });
+</script>
+
+
+</body>
+</html>
