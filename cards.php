@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
     <style>
 
         img:hover{
@@ -21,17 +23,20 @@
             transform: scale(1.5); /* Ajusta el factor de escala según tu preferencia */
         }
     </style>
-    <title>ConectPro</title>
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
 </head>
 <body>
 
-<div class="container ml-2">
+<div class="container">
     <div class="card border-dark mb-2">
         <div class="card-body d-flex">
-            <div class="mr-2">
+            <div class="mr-3">
                 <img class="rounded-circle img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Foto_Perfil_.jpg" alt="Foto de perfil" style="max-width: 150px; max-height: 150px;">
             </div>
-            <div class="ml-2">
+            <div class="ml-3">
                 <h5 class="card-title">Nombre</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Profesión</h6>
                 <p class="card-text">Descripción de la persona</p>
@@ -42,7 +47,7 @@
             <a href="#" class="btn btn-primary">Contratar</a>
         </div>
         <!-- Logo Profesionista -->
-        <div class="ml-auto" style="ml-auto mr-2 d-flex">
+        <div class="ml-auto" style="ml-auto mr-4 d-flex">
     <img class="rounded-circle img-fluid logo-profesional" src="" alt="Logo del profesional" style="max-width: 75px; max-height: 75px;">
 </div>
 
@@ -56,16 +61,14 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <!-- Asegúrate de incluir jQuery antes de este script -->
 <script>
     $(document).ready(function() {
         // Utiliza PHP para obtener la profesión del profesional desde la base de datos
         <?php
             // Conecta a la base de datos (asegúrate de manejar las conexiones de forma segura)
-            $conexion=new mysqli("localhost", "usuariodb", "", "id21883336_conectpro", "3306"); 
+            $conexion = new mysqli("localhost", "root", "", "conectpro");
 
             // Verifica la conexión
             if ($conexion->connect_error) {

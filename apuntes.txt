@@ -144,22 +144,53 @@ Plantillazo lol xD jAJJAJAJAKGjasñodigjlksjdghdwiuoghpdsiuo
 </html>
 
 
- 
-9.)39qg_ZZQ0t*T( PASSWORD SQL
 
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Asegúrate de incluir jQuery antes de este script -->
+<script>
+    $(document).ready(function() {
+        // Utiliza PHP para obtener la profesión del profesional desde la base de datos
+        <?php
+            // Conecta a la base de datos (asegúrate de manejar las conexiones de forma segura)
+            $conexion = new mysqli("localhost", "root", "", "conectpro");
 
+            // Verifica la conexión
+            if ($conexion->connect_error) {
+                die("La conexión a la base de datos ha fallado: " . $conexion->connect_error);
+            }
 
-    // Manejar la foto de perfil 
-    $fotoPerfil = $_FILES ['fotoperfil'];
-    // Verifica si se cargo la imagen
-    if ($fotoPerfil ['error']== UPLOAD_ERR_OK) {
-        // Guarda la informacion del archivo
-        $nombreArchivo = $fotoPerfil ['name'];
-        $rutaTemporal =$fotoPerfil ['tmp_name']
-     
-        
-        
+            // Ejecuta la consulta para obtener la profesión del profesional
+            $profesionistaID = 1; // Reemplaza esto con el ID del profesional actual
+            $consulta = "SELECT Profesion FROM profesionistas WHERE ProfesionistaID = $profesionistaID";
+            $resultado = $conexion->query($consulta);
 
+            // Verifica si se obtuvo un resultado
+            if ($resultado->num_rows > 0) {
+                $fila = $resultado->fetch_assoc();
+                $profesion = $fila['Profesion'];
 
-    }
+                // Imprime la profesión como variable de JavaScript
+                echo "var profesion = '$profesion';";
+            }
+
+            // Cierra la conexión
+            $conexion->close();
+        ?>
+
+        // Switch para establecer la imagen del logo según la profesión
+        switch (profesion) {
+            case "plomero":
+                $(".logo-profesional").attr("src", "https://images.vexels.com/media/users/3/129025/isolated/preview/1ff74bbbb9d5e2e296811ba970f2bbfe-simbolo-del-grifo-de-agua-svg.png");
+                break;
+            // Agrega más casos según las profesiones que desees manejar
+        }
+
+        // Agrega el código para el evento click-to-zoom aquí
+        $('.click-to-zoom').click(function() {
+            $(this).toggleClass('enlarged');
+        });
+    });
+</script>

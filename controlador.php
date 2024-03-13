@@ -1,9 +1,12 @@
 <?php
+// Iniciar sesión
+session_start();
+
 // Configuración de la conexión a la base de datos
 $host = "localhost";
-$usuario_db = "usuariodb"; 
-$contrasena_db = "9.)39qg_ZZQ0t*T(";
-$nombre_db = "id21883336_conectpro";
+$usuario_db = "root";
+$contrasena_db = "";
+$nombre_db = "conectpro";
 
 // Conexión a la base de datos
 $conexion = new mysqli($host, $usuario_db, $contrasena_db, $nombre_db);
@@ -21,9 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registro'])) {
     $contrasena = password_hash($_POST["contrasena"], PASSWORD_DEFAULT); // Hash de la contraseña
     $nombre = $_POST["nombre"];
 
-   
-
-    // Fin Foto de Perfil
+    // Manejar la foto de perfil (guardar en la base de datos o servidor, dependiendo de tus necesidades)
 
     // Preparar la consulta SQL para insertar datos en la tabla usuarios
     $sql = "INSERT INTO usuarios (Usuario, Correo, Contrasena, Nombre) VALUES (?, ?, ?, ?)";
@@ -56,9 +57,12 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
     // Verificar si se encontró un usuario con las credenciales proporcionadas
     if ($resultado->num_rows == 1) {
         $fila = $resultado->fetch_assoc();
+
         if (password_verify($contrasena, $fila['Contrasena'])) {
-            
-            header("Refresh: 2; url=elecciondeusuario.php");
+            // Autenticación exitosa, iniciar sesión
+            $_SESSION['usuario_id'] = $fila['id']; // Guardar el ID del usuario en la sesión
+            header("Location: elecciondeusuario.php"); // Redirigir a la página deseada
+            exit(); // Salir del script
         } else {
             // Credenciales incorrectas
             echo "<script>alert('Usuario o contraseña incorrectos.'); window.location.href='login.php';</script>";

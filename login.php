@@ -12,21 +12,18 @@
 <body>
     <?php include('navbar.php') ?>
 
-    <div class="container  text-center mt-5 ">
-        <div class="container"> 
-        <img src="https://cdn-icons-png.flaticon.com/512/996/996484.png" alt=" img usuario" class="img-fluid" style= "max-width: 75px; max-height: 75px; ">
-        </div>
-    
-        <div class="row justify-content-center ">
+    <div class="container">
+        <img src="" alt="logo inicio o vector de coso" class="justify-content-center">
+        <div class="row justify-content-center">
             <div class="col-md-6">
                 <form id="login-form" class="mt-5" method="post" action="controlador.php" onsubmit="return validarFormulario()">
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="usuario">Nombre de usuario:</label>
-                        <input type="text" id="usuario" name="usuario" class="form-control bg-primary text-white" required >
+                        <input type="text" id="usuario" name="usuario" class="form-control" required>
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="contrasena">Contraseña:</label>
-                        <input type="password" id="contrasena" name="contrasena" class="form-control bg-primary text-white" required>
+                        <input type="password" id="contrasena" name="contrasena" class="form-control" required>
                     </div>
                     <input type="hidden" name="inicio_sesion" value="1">
                     <button type="submit" class="btn btn-primary" name="btningresar">Iniciar sesión</button>
