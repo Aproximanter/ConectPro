@@ -60,8 +60,9 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
 
         if (password_verify($contrasena, $fila['Contrasena'])) {
             // Autenticación exitosa, iniciar sesión
-            $_SESSION['usuario_id'] = $fila['id']; // Guardar el ID del usuario en la sesión
-            header("Location: elecciondeusuario.php"); // Redirigir a la página deseada
+            $_SESSION['usuario_id'] = $fila['id'];
+            $_SESSION['username'] = $usuario; // Guardar el ID del usuario en la sesión
+            header("Location: index.php"); // Redirigir a la página deseada
             exit(); // Salir del script
         } else {
             // Credenciales incorrectas

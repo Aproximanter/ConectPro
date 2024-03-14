@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,7 +13,7 @@
 </head>
 <body class="bg-light">
 
-<?php include('navbar.php')?>
+<?php include('navbar.php'); ?>
 
 <div class="container-fluid bg-danger text-white text-center py-5">
     <h1 class="display-1 text-center">Bienvenido</h1>
@@ -22,7 +23,7 @@
     <div class="row gx-5">
         <p class="lead border bg-light">
          
-        <?php include('cards.php')?>
+        <?php include('cards.php'); ?>
         
         </p>
     </div>
@@ -31,6 +32,9 @@
 <div class="container-fluid text-center">
     <button type="button" id="entrar" class="btn btn-primary btn-lg">Iniciar sesión</button>
 </div>
+
+
+
 
 <script>
     document.getElementById('entrar').addEventListener('click', function() {
