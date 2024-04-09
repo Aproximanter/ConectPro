@@ -194,3 +194,30 @@ Plantillazo lol xD jAJJAJAJAKGjasñodigjlksjdghdwiuoghpdsiuo
         });
     });
 </script>
+
+
+
+
+
+Sesion
+<?php
+session_start();
+
+// Función para cerrar sesión
+function cerrarSesion() {
+    // Destruir todas las variables de sesión
+    session_unset();
+    
+    // Destruir la sesión
+    session_destroy();
+    
+    // Redireccionar a la página de inicio o a donde desees después de cerrar sesión
+    header("Location: index.php");
+    exit;
+}
+
+// Verificar si se ha enviado el formulario para cerrar sesión
+if (isset($_POST['cerrar_sesion'])) {
+    cerrarSesion();
+}
+?>

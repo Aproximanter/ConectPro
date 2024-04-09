@@ -98,8 +98,12 @@ $conexion = connection();
                     echo "<td>" . $row['Usuario'] . "</td>";
                     echo "<td>" . $row['Correo'] . "</td>";
                     echo "<td>" . $row['Nombre'] . "</td>";
-                    echo "<td><button type='button' class='btn btn-primary editar-usuario' data-id='" . $row['UsuarioID'] . "' data-usuario='" . $row['Usuario'] . "' data-correo='" . $row['Correo'] . "' data-nombre='" . $row['Nombre'] . "'><i class='bi bi-pencil'></i></button> <button type='button' class='btn btn-danger eliminar-usuario' data-id='" . $row['UsuarioID'] . "'><i class='bi bi-x'></i></button></td>";
-                    echo "</tr>";
+                    echo "<td>
+                    <button type='button' class='btn btn-primary editar-usuario' data-id='" . $row['UsuarioID'] . "' data-usuario='" . $row['Usuario'] . "' data-correo='" . $row['Correo'] . "' data-nombre='" . $row['Nombre'] . "' data-bs-toggle='tooltip' data-bs-placement='top' title='Editar'><i class='bi bi-pencil'></i></button>
+                    <button type='button' class='btn btn-danger eliminar-usuario' data-id='" . $row['UsuarioID'] . "' data-bs-toggle='tooltip' data-bs-placement='top' title='Eliminar'><i class='bi bi-x'></i></button>
+                  </td>";
+
+                  
                 }
             } else {
                 echo "<tr><td colspan='5'>No hay usuarios registrados</td></tr>";

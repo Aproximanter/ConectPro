@@ -1,3 +1,51 @@
+<?php
+include 'conexion_bd.php';
+
+// Obtenemos la conexión a la base de datos
+$con = connection();
+
+// Consulta SQL para obtener todos los profesionistas
+$sql = "SELECT p.*, p.FotoPerfil 
+        FROM profesionistas p";
+
+$resultado = mysqli_query($con, $sql);
+
+if (mysqli_num_rows($resultado) > 0) {
+    // Mostramos una tarjeta para cada profesionista
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        echo '<div class="container">';
+        echo '<div class="card border-dark mb-2">';
+        echo '<div class="card-body d-flex">';
+        echo '<div class="mr-3">';
+        // Verifica si hay una foto de perfil disponible
+        if (!empty($fila["FotoPerfil"])) {
+            echo '<img class="rounded-circle img-fluid" src="' . $fila["FotoPerfil"] . '" alt="Foto de perfil" style="max-width: 150px; max-height: 150px;">';
+        } else {
+            echo '<img class="rounded-circle img-fluid" src="https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png" alt="Foto de perfil por defecto" style="max-width: 150px; max-height: 150px;">';
+        }
+        echo '</div>';
+        echo '<div class="ml-3">';
+        echo '<h5 class="card-title">' . $fila["Nombre"] . '</h5>';
+        echo '<h6 class="card-subtitle mb-2 text-muted">' . $fila["Profesion"] . '</h6>';
+        echo '<p class="card-text">' . $fila["Descripcion"] . '</p>';
+        echo '</div>';
+        echo '</div>';
+        echo '<div class="d-flex justify-content-center mb-2">';
+        echo '<a href="#" class="btn btn-primary">Contratar</a>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+} else {
+    echo "No hay profesionistas en la base de datos.";
+}
+
+// Cerramos la conexión
+mysqli_close($con);
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -50,9 +50,12 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
 
-    // Consulta SQL para verificar las credenciales
-    $consulta = "SELECT * FROM usuarios WHERE Usuario='$usuario'";
-    $resultado = $conexion->query($consulta);
+    // Consulta SQL preparada para verificar las credenciales
+    $consulta = "SELECT UsuarioID, Contrasena FROM usuarios WHERE Usuario = ?";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
     // Verificar si se encontró un usuario con las credenciales proporcionadas
     if ($resultado->num_rows == 1) {
@@ -60,8 +63,8 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
 
         if (password_verify($contrasena, $fila['Contrasena'])) {
             // Autenticación exitosa, iniciar sesión
-            $_SESSION['usuario_id'] = $fila['id'];
-            $_SESSION['username'] = $usuario; // Guardar el ID del usuario en la sesión
+            $_SESSION['UsuarioID'] = $fila['UsuarioID']; // Guardar el ID del usuario en la sesión
+            $_SESSION['username'] = $usuario;
             header("Location: index.php"); // Redirigir a la página deseada
             exit(); // Salir del script
         } else {
@@ -72,8 +75,9 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
         // Credenciales incorrectas
         echo "<script>alert('Usuario o contraseña incorrectos.'); window.location.href='login.php';</script>";
     }
+
+    // Cerrar la consulta preparada
+    $stmt->close();
 }
 
-// Cerrar la conexión a la base de datos
-$conexion->close();
 ?>

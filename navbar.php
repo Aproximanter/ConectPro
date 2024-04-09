@@ -1,5 +1,10 @@
+
+
 <?php
-session_start();
+// Verificar si ya hay una sesión activa
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
 // Función para cerrar sesión
 function cerrarSesion() {
@@ -20,6 +25,7 @@ if (isset($_POST['cerrar_sesion'])) {
 }
 ?>
 
+<!-- Navbar.php -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -46,7 +52,7 @@ if (isset($_POST['cerrar_sesion'])) {
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
-          <a class="nav-link" href="login.php">Vender Servicios</a>
+          <a class="nav-link" href="formularioprof.php">Vender Servicios</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="perfil.php">Perfil</a>
