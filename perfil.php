@@ -48,6 +48,9 @@ $usuario = obtenerUsuario($userID);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="js/jquery-3.5.1.min.js"></script>
     <!-- Estilos personalizados -->
+    <!-- Bootstrap JS y jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="js/jquery-3.5.1.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -89,14 +92,13 @@ $usuario = obtenerUsuario($userID);
                 <p><strong>Nombre de usuario:</strong> <?php echo $usuario['Usuario']; ?></p>
                 <p><strong>Correo electrónico:</strong> <?php echo $usuario['Correo']; ?></p>
                 <p><strong>Nombre:</strong> <?php echo $usuario['Nombre']; ?></p>
+
                 <!-- Agrega más campos según sea necesario -->
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS y jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="js/jquery-3.5.1.min.js"></script>
+
 </body>
 </html>

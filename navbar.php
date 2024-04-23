@@ -1,5 +1,3 @@
-
-
 <?php
 // Verificar si ya hay una sesión activa
 if (session_status() == PHP_SESSION_NONE) {
@@ -33,7 +31,9 @@ if (isset($_POST['cerrar_sesion'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="js/jquery-3.5.1.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" rel="stylesheet"> <!-- Agrega la biblioteca de iconos Bootstrap -->
     <style>
     
     </style>
@@ -55,33 +55,30 @@ if (isset($_POST['cerrar_sesion'])) {
           <a class="nav-link" href="formularioprof.php">Vender Servicios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="perfil.php">Perfil</a>
-        </li>
-        <li class="nav-item">
           <?php if(isset($_SESSION['username'])): ?>
               <span class="nav-link">Bienvenido, <?= $_SESSION['username'] ?></span>
           <?php else: ?>
               <a class="nav-link" href="login.php">Iniciar sesión</a>
           <?php endif; ?>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profesionistas</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Conductor</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <!-- Agrega más opciones si es necesario -->
-          </ul>
-        </li>
       </ul>
       <?php if(isset($_SESSION['username'])): ?>
-        <form method="post" class="d-flex">
-            <button type="submit" name="cerrar_sesion" class="btn btn-link">Cerrar sesión</button>
-        </form>
+        <ul class="navbar-nav ms-auto me-0 my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item">
+            <a class="nav-link" href="perfil.php">
+                <i class="bi bi-person"></i> <!-- Icono de perfil -->
+                Perfil
+            </a>
+          </li>
+          <li class="nav-item">
+            <form method="post" class="d-flex">
+                <button type="submit" name="cerrar_sesion" class="btn btn-link">
+                    <i class="bi bi-door-open"></i> <!-- Icono de puerta -->
+                </button>
+            </form>
+          </li>
+        </ul>
       <?php endif; ?>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar Usuario" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Buscar</button>
-      </form>
     </div>
   </div>
 </nav>

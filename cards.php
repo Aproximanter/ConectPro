@@ -13,7 +13,8 @@ $resultado = mysqli_query($con, $sql);
 if (mysqli_num_rows($resultado) > 0) {
     // Mostramos una tarjeta para cada profesionista
     while ($fila = mysqli_fetch_assoc($resultado)) {
-        echo '<div class="container">';
+        // Añadimos un atributo data-profesion con la información de la profesión
+        echo '<div class="container professional-card" data-profesion="' . $fila["Profesion"] . '">';
         echo '<div class="card border-dark mb-2">';
         echo '<div class="card-body d-flex">';
         echo '<div class="mr-3">';
@@ -31,7 +32,10 @@ if (mysqli_num_rows($resultado) > 0) {
         echo '</div>';
         echo '</div>';
         echo '<div class="d-flex justify-content-center mb-2">';
-        echo '<a href="#" class="btn btn-primary">Contratar</a>';
+        // Asegúrate de pasar la profesión al botón "Contratar"
+       // Asegúrate de pasar el ID del profesionista al botón "Contratar"
+echo '<button class="btn btn-primary btn-contratar" data-toggle="modal" data-target="#myModal" data-profesionista-id="' . $fila["ProfesionistaID"] . '">Contratar</button>';
+
         echo '</div>';
         echo '</div>';
         echo '</div>';
@@ -43,7 +47,6 @@ if (mysqli_num_rows($resultado) > 0) {
 // Cerramos la conexión
 mysqli_close($con);
 ?>
-
 
 
 <!DOCTYPE html>
@@ -74,88 +77,65 @@ mysqli_close($con);
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="js/jquery-3.5.1.min.js"></script>
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" rel="stylesheet"> <!-- Agrega la biblioteca de iconos Bootstrap -->
 </head>
 <body>
 
-<div class="container">
-    <div class="card border-dark mb-2">
-        <div class="card-body d-flex">
-            <div class="mr-3">
-                <img class="rounded-circle img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Foto_Perfil_.jpg" alt="Foto de perfil" style="max-width: 150px; max-height: 150px;">
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Detalles del Profesionista</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="ml-3">
-                <h5 class="card-title">Nombre</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Profesión</h6>
-                <p class="card-text">Descripción de la persona</p>
-                
+
+            <!-- Modal body -->
+            <div class="modal-body" id="profesionistaDetails">
+                <!-- Aquí se cargarán los detalles del profesionista mediante AJAX -->
             </div>
-        </div>
-        <div class="d-flex justify-content-center mb-2">
-            <a href="#" class="btn btn-primary">Contratar</a>
-        </div>
-        <!-- Logo Profesionista -->
-        <div class="ml-auto" style="ml-auto mr-4 d-flex">
-    <img class="rounded-circle img-fluid logo-profesional" src="" alt="Logo del profesional" style="max-width: 75px; max-height: 75px;">
-</div>
 
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" >Pagar con PayPal</button>
+            </div>
 
-        <div class="text-center">
-            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px; margin-lefth: 20px;">
-            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
-            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
-            <img src="https://www.ludusglobal.com/hubfs/Riesgo-el%C3%A9ctrico-en-el-trabajo.jpg#keepProtocol" class="card-img-top rounded img-fluid mb-3 click-to-zoom" alt="..." style="max-width: 150px; max-height: 150px; margin-right: 20px;">
         </div>
     </div>
 </div>
 
-
-<!-- Asegúrate de incluir jQuery antes de este script -->
 <script>
-    $(document).ready(function() {
-        // Utiliza PHP para obtener la profesión del profesional desde la base de datos
-        <?php
-            // Conecta a la base de datos (asegúrate de manejar las conexiones de forma segura)
-            $conexion = new mysqli("localhost", "root", "", "conectpro");
+$(document).ready(function() {
+    // Manejar el clic en el botón "Contratar"
+    $('.btn-contratar').click(function(e) {
+        e.preventDefault(); // Evitar el comportamiento predeterminado del botón
 
-            // Verifica la conexión
-            if ($conexion->connect_error) {
-                die("La conexión a la base de datos ha fallado: " . $conexion->connect_error);
+        // Obtener el ID del profesionista
+        var profesionistaId = $(this).data('profesionista-id');
+
+        // Realizar la solicitud AJAX para obtener los datos del profesionista
+        $.ajax({
+            url: 'obtener_datos_profesionista.php',
+            type: 'POST',
+            data: { profesionista_id: profesionistaId },
+            success: function(response) {
+                // Manejar la respuesta del servidor (por ejemplo, mostrar los datos en un modal)
+                $('#profesionistaDetails').html(response);
+                $('#myModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
             }
-
-            // Ejecuta la consulta para obtener la profesión del profesional
-            $profesionistaID = 1; // Reemplaza esto con el ID del profesional actual
-            $consulta = "SELECT Profesion FROM profesionistas WHERE ProfesionistaID = $profesionistaID";
-            $resultado = $conexion->query($consulta);
-
-            // Verifica si se obtuvo un resultado
-            if ($resultado->num_rows > 0) {
-                $fila = $resultado->fetch_assoc();
-                $profesion = $fila['Profesion'];
-
-                // Imprime la profesión como variable de JavaScript
-                echo "var profesion = '$profesion';";
-            }
-
-            // Cierra la conexión
-            $conexion->close();
-        ?>
-
-        // Switch para establecer la imagen del logo según la profesión
-        switch (profesion) {
-            case "plomero":
-                $(".logo-profesional").attr("src", "https://images.vexels.com/media/users/3/129025/isolated/preview/1ff74bbbb9d5e2e296811ba970f2bbfe-simbolo-del-grifo-de-agua-svg.png");
-                break;
-            // Agrega más casos según las profesiones que desees manejar
-        }
-
-        // Agrega el código para el evento click-to-zoom aquí
-        $('.click-to-zoom').click(function() {
-            $(this).toggleClass('enlarged');
         });
     });
-</script>
+});
 
+
+</script>
 
 </body>
 </html>

@@ -13,7 +13,7 @@
     <?php include('navbar.php') ?>
 
     <div class="container">
-        <img src="" alt="logo inicio o vector de coso" class="justify-content-center">
+        <div class="container text-center"><img src="https://cdn-icons-png.flaticon.com/512/618/618631.png" alt="logo inicio o vector de coso" class="img-fluid mx-auto" style="max-width: 10%"></div>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <form id="login-form" class="mt-5" method="post" action="controlador.php" onsubmit="return validarFormulario()">

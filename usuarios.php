@@ -6,6 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
     <title>CRUD Usuarios</title>
     <style>
         .edit-form {
@@ -24,13 +26,50 @@
     </style>
 </head>
 <body>
+<?php include('navbarcrood.php');?> 
 <?php
 include("conexion_bd.php");
 
 // Obtener la conexión a la base de datos
 $conexion = connection();
 ?> 
-<?php include('navbar.php');?> 
+
+
+<?php
+
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['UsuarioID'])) {
+    // Mostrar un mensaje de error y redirigir al usuario a la página de inicio de sesión
+    echo "<script>alert('Debes iniciar sesión para acceder a esta página.'); window.location.href = 'login.php';</script>";
+    exit(); // Finalizar el script para evitar que se siga ejecutando el código
+}
+
+// Obtener el nivel del usuario actual desde la base de datos
+$usuarioID = $_SESSION['UsuarioID'];
+$sql = "SELECT Nivel FROM usuarios WHERE UsuarioID = '$usuarioID'";
+$resultado = $conexion->query($sql);
+
+if ($resultado->num_rows > 0) {
+    $fila = $resultado->fetch_assoc();
+    $nivel = $fila['Nivel'];
+
+    // Almacenar el nivel del usuario en una variable de sesión
+    $_SESSION['nivel'] = $nivel;
+} else {
+    // Mostrar un mensaje de error y redirigir al usuario a una página de error de usuario
+    echo "<script>alert('Error: No se pudo encontrar la información del usuario.'); window.location.href = 'error_usuario.php';</script>";
+    exit(); // Finalizar el script para evitar que se siga ejecutando el código
+}
+
+// Verificar si el usuario tiene nivel de administrador
+if ($_SESSION['nivel'] !== 'admin') {
+    // Mostrar un mensaje de error y redirigir al usuario a una página de acceso denegado
+    echo "<script>alert('Acceso denegado: No tienes permiso para acceder a esta página.'); window.location.href = 'index.php';</script>";
+    exit(); // Finalizar el script para evitar que se siga ejecutando el código
+}
+?>
+
+
 
 <div class="container">
     <h1>CRUD Usuarios</h1>

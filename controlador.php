@@ -24,24 +24,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registro'])) {
     $contrasena = password_hash($_POST["contrasena"], PASSWORD_DEFAULT); // Hash de la contraseña
     $nombre = $_POST["nombre"];
 
-    // Manejar la foto de perfil (guardar en la base de datos o servidor, dependiendo de tus necesidades)
+    // Manejar la foto de perfil
+    if (isset($_FILES['fotoPerfil'])) {
+        $fotoNombre = $_FILES['fotoPerfil']['name'];
+        $fotoTemp = $_FILES['fotoPerfil']['tmp_name'];
+        $destino = '/fotos_perfil' . $fotoNombre; 
 
-    // Preparar la consulta SQL para insertar datos en la tabla usuarios
-    $sql = "INSERT INTO usuarios (Usuario, Correo, Contrasena, Nombre) VALUES (?, ?, ?, ?)";
-    $stmt = $conexion->prepare($sql);
+        // Mover la foto de perfil al directorio de destino
+        if (move_uploaded_file($fotoTemp, $destino)) {
+            // Preparar la consulta SQL para insertar datos en la tabla usuarios
+            $sql = "INSERT INTO usuarios (Usuario, Correo, Contrasena, Nombre, FotoPerfil) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conexion->prepare($sql);
 
-    // Vincular parámetros
-    $stmt->bind_param("ssss", $usuario, $correo, $contrasena, $nombre);
+            // Vincular parámetros
+            $stmt->bind_param("sssss", $usuario, $correo, $contrasena, $nombre, $destino);
 
-    // Ejecutar la consulta
-    if ($stmt->execute()) {
-        echo "<script>alert('Registro de usuario exitoso'); window.location.href='elecciondeusuario.php';</script>";
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                echo "<script>alert('Registro de usuario exitoso'); window.location.href='index.php';</script>";
+            } else {
+                echo "Error al registrar el usuario: " . $stmt->error;
+            }
+
+            // Cerrar la conexión y liberar recursos
+            $stmt->close();
+        } else {
+            echo "Error al subir la foto de perfil.";
+        }
     } else {
-        echo "Error al registrar el usuario: " . $stmt->error;
+        echo "Por favor, seleccione una foto de perfil.";
     }
-
-    // Cerrar la conexión y liberar recursos
-    $stmt->close();
 }
 
 // Verificar si el formulario de inicio de sesión fue enviado
@@ -79,5 +91,4 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
     // Cerrar la consulta preparada
     $stmt->close();
 }
-
 ?>

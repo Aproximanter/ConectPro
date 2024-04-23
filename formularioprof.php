@@ -55,10 +55,17 @@ $profesiones = array("Doctor", "Abogado", "Ingeniero", "Profesor", "Diseñador",
                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-        <label for="foto_perfil" class="form-label">Foto de perfil</label>
-        <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" required>
+    <label for="costo" class="form-label">Costo</label>
+    <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input type="number" class="form-control" id="costo" name="costo" step="0.01" required>
     </div>
-    <button type="submit" class="btn btn-primary" name="crear_profesionista">Registrarse</button>
+</div>
+                        <div class="mb-3">
+                            <label for="foto_perfil" class="form-label">Foto de perfil</label>
+                            <input type="file" class="form-control" id="foto_perfil" name="foto_perfil" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="crear_profesionista">Registrarse</button>
                     </form>
                 </div>
             </div>
