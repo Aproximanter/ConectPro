@@ -32,8 +32,7 @@ if (mysqli_num_rows($resultado) > 0) {
         echo '</div>';
         echo '</div>';
         echo '<div class="d-flex justify-content-center mb-2">';
-        // Asegúrate de pasar la profesión al botón "Contratar"
-       // Asegúrate de pasar el ID del profesionista al botón "Contratar"
+
 echo '<button class="btn btn-primary btn-contratar" data-toggle="modal" data-target="#myModal" data-profesionista-id="' . $fila["ProfesionistaID"] . '">Contratar</button>';
 
         echo '</div>';
@@ -101,14 +100,14 @@ mysqli_close($con);
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" >Pagar con PayPal</button>
+                <button type="button" class="btn btn-primary" href="paypal.php" >Pagar con PayPal</button>
             </div>
 
         </div>
     </div>
 </div>
 
-<script>
+<script> 
 $(document).ready(function() {
     // Manejar el clic en el botón "Contratar"
     $('.btn-contratar').click(function(e) {
@@ -134,6 +133,58 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    // Manejar el envío del formulario de comentarios
+    $('#commentForm').submit(function(e) {
+        e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+        
+        // Obtener los datos del formulario
+        var stars = $('#stars').val();
+        var comment = $('#comment').val();
+        var profesionistaId = $('#myModal').find('.modal-title').data('profesionista-id');
+        
+        // Realizar la solicitud AJAX para enviar los datos del formulario
+        $.ajax({
+            url: 'guardar_comentario.php',
+            type: 'POST',
+            data: {
+                profesionista_id: profesionistaId,
+                stars: stars,
+                comment: comment
+            },
+            success: function(response) {
+                // Recargar los comentarios anteriores después de enviar el comentario nuevo
+                loadPreviousComments(profesionistaId);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    // Cargar comentarios anteriores al abrir el modal
+    $('#myModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Botón que activó el modal
+        var profesionistaId = button.data('profesionista-id'); // Extraer información de los atributos data
+
+        loadPreviousComments(profesionistaId);
+    });
+
+    // Función para cargar los comentarios anteriores mediante AJAX
+    function loadPreviousComments(profesionistaId) {
+        $.ajax({
+            url: 'cargar_comentarios.php',
+            type: 'POST',
+            data: { profesionista_id: profesionistaId },
+            success: function(response) {
+                $('#previousComments').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+});
 
 </script>
 

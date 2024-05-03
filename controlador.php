@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registro'])) {
     if (isset($_FILES['fotoPerfil'])) {
         $fotoNombre = $_FILES['fotoPerfil']['name'];
         $fotoTemp = $_FILES['fotoPerfil']['tmp_name'];
-        $destino = '/fotos_perfil' . $fotoNombre; 
+        $destino = 'fotos_perfil/' . $fotoNombre; 
 
         // Mover la foto de perfil al directorio de destino
         if (move_uploaded_file($fotoTemp, $destino)) {

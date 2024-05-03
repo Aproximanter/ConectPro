@@ -24,7 +24,7 @@ if(!isset($_SESSION['UsuarioID'])) {
 }
 
 // Definir opciones de profesión
-$profesiones = array("Doctor", "Abogado", "Ingeniero", "Profesor", "Diseñador", "Escritor", "Artista");
+$profesiones = array("Obrero", "Carpintero", "Pintor", "Maquinista", "Conductor", "Limpieza domestica", "Otro");
 
 ?>
 

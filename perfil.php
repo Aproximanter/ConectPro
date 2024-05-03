@@ -45,12 +45,10 @@ $usuario = obtenerUsuario($userID);
     <title>Perfil de Usuario</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap JS y jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="js/jquery-3.5.1.min.js"></script>
     <!-- Estilos personalizados -->
-    <!-- Bootstrap JS y jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="js/jquery-3.5.1.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -78,6 +76,12 @@ $usuario = obtenerUsuario($userID);
             font-weight: bold;
             color: #333333;
         }
+        .profile-picture {
+            max-width: 200px;
+            border-radius: 50%; /* Hace la imagen circular */
+            display: block; /* Para centrar la imagen */
+            margin: 0 auto; /* Para centrar la imagen */
+        }
     </style>
 </head>
 <body>
@@ -89,6 +93,11 @@ $usuario = obtenerUsuario($userID);
         <div class="col-md-6">
             <div class="profile-card">
                 <h1>Perfil de Usuario</h1>
+                <?php if ($usuario['FotoPerfil']) : ?>
+                    <img src="<?php echo $usuario['FotoPerfil']; ?>" alt="Foto de perfil" class="profile-picture">
+                <?php else : ?>
+                    <p><strong>Foto de perfil:</strong> No hay foto de perfil disponible.</p>
+                <?php endif; ?>
                 <p><strong>Nombre de usuario:</strong> <?php echo $usuario['Usuario']; ?></p>
                 <p><strong>Correo electrónico:</strong> <?php echo $usuario['Correo']; ?></p>
                 <p><strong>Nombre:</strong> <?php echo $usuario['Nombre']; ?></p>
@@ -99,6 +108,6 @@ $usuario = obtenerUsuario($userID);
     </div>
 </div>
 
-
 </body>
 </html>
+
