@@ -9,19 +9,21 @@ if (isset($_POST['profesionista_id'])) {
   $con = connection();
   
   // Consulta SQL para obtener los datos del profesionista
-  $sql = "SELECT * FROM profesionistas WHERE ProfesionistaID = $profesionistaId";
+  $sql = "SELECT * FROM profesionistas WHERE ProfesionistaID = '$profesionistaId'";
   $resultado = mysqli_query($con, $sql);
   
   if (mysqli_num_rows($resultado) > 0) {
     $fila = mysqli_fetch_assoc($resultado);
     // Imprime los datos del profesionista en formato HTML
-    echo '<table>';
-    echo '<tr><th>Nombre</th><th>Profesión</th><th>Foto de Perfil</th></tr>';
+    echo '<table class="table">';
+    echo '<tr><th class = "mr-2  ml-2  ">Nombre</th><th class = "mr-2  ml-2" >Profesión</th><th class = "mr-2  ml-2" >Tarifa de visita</th></tr>';
     echo '<tr>';
     echo '<td>' . $fila["Nombre"] . '</td>';
     echo '<td>' . $fila["Profesion"] . '</td>';
-    // Mostrar la foto de perfil
-    echo '<td><img src="' . $fila["FotoPerfil"] . '" alt="Foto de Perfil" style="width: 100px; height: auto;"></td>';
+    echo '<td>$' . $fila["Costo"] . '</td>';
+
+    
+   
     echo '</tr>';
     echo '</table>';
     // Agrega más campos según tus necesidades

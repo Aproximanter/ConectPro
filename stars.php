@@ -1,80 +1,74 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reseña con Estrellas</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .stars {
-      display: inline-block;
-      font-size: 30px;
-      color: #ffd700;
-    }
-  </style>
+  <title>Reseña y calificación</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-<div class="container mt-5">
-  <h2>Deja tu reseña</h2>
-
-  <div class="mb-3">
-    <label for="stars">Selecciona las estrellas:</label>
-    <div class="stars" id="stars-container">
-      <span class="star" data-value="1">&#9733;</span>
-      <span class="star" data-value="2">&#9733;</span>
-      <span class="star" data-value="3">&#9733;</span>
-      <span class="star" data-value="4">&#9733;</span>
-      <span class="star" data-value="5">&#9733;</span>
-    </div>
+  <div class="container">
+    <h2>Deja tu reseña y calificación</h2>
+    <form action="cargar_comentarios.php" method="POST">
+      <div class="form-group">
+        <label for="calificacion">Calificación:</label><br>
+        <div class="rating">
+          <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
+          <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
+          <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+          <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
+          <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="comentario">Comentario:</label>
+        <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
   </div>
 
-  <div class="mb-3">
-    <label for="comment">Deja tu comentario:</label>
-    <textarea class="form-control" id="comment" rows="4"></textarea>
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reseña y calificación</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h2>Deja tu reseña y calificación</h2>
+    <form action="cargar_comentarios.php" method="POST">
+      <div class="form-group">
+        <label for="calificacion">Calificación:</label><br>
+        <div class="rating">
+          <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
+          <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
+          <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+          <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
+          <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="comentario">Comentario:</label>
+        <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
   </div>
 
-  <button class="btn btn-primary" onclick="submitReview()">Enviar reseña</button>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-  let selectedStars = 0;
-
-  // Función para manejar la selección de estrellas
-  function selectStar(value) {
-    selectedStars = value;
-    updateStars();
-  }
-
-  // Función para actualizar el estilo de las estrellas seleccionadas
-  function updateStars() {
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((star, index) => {
-      if (index < selectedStars) {
-        star.classList.add('text-warning');
-      } else {
-        star.classList.remove('text-warning');
-      }
-    });
-  }
-
-  // Función para enviar la reseña (puedes personalizar según tus necesidades)
-  function submitReview() {
-    const comment = document.getElementById('comment').value;
-    alert(`Reseña enviada:\nEstrellas: ${selectedStars}\nComentario: ${comment}`);
-  }
-
-  // Añadir evento de clic a las estrellas
-  const starsContainer = document.getElementById('stars-container');
-  starsContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('star')) {
-      selectStar(parseInt(event.target.getAttribute('data-value')));
-    }
-  });
-</script>
-
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,86 +1,66 @@
-<!DOCTYPE html>
-<html lang="es"> <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integración de PayPal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Checkout</title>
+    <script
+      crossorigin
+      src="https://pay.conekta.com/v1.0/js/conekta-checkout.min.js"
+    ></script>
+    <!-- En este archivo esta la config del componente -->
+  </head>
+  <body>
+    <div id="example" style="height: 714px"></div>
+    <script type="text/javascript">
+        import { CustomersApi, Configuration, Customer, CustomerResponse } from "conekta";
 
+const apikey = "key_xxxxx";
+const config = new Configuration({ accessToken: apikey });
+const client = new CustomersApi(config);
 
-   #paypal-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+const customer: Customer = {
+  name: "John Constantine",
+  email: "frank@google.com",
+  phone: "+5215555555555"
+}
 
-        #paypal-button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; 
-        }
+client.createCustomer(customer).then(response => {
+  const customerResponse = response.data as CustomerResponse;
+  console.log(customerResponse.id);
+}).catch(error => {
+  console.error("here", error);
+});
+      const options = {
+        backgroundMode: 'lightMode', //lightMode o darkMode
+        colorPrimary: '#081133', //botones y bordes
+        colorText: '#585987', // títulos
+        colorLabel: '#585987', // input labels
+        inputType: 'minimalMode', // minimalMode o flatMode
+      };
+      const config = {
+        locale: 'es',
+        publicKey: '{{yourKey}}',
+        targetIFrame: '#example',
+      };
 
-        .paypal-button {
-            background-color: #007bff; 
-            color: #fff; 
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .paypal-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-
-<?php include('navbar.php')?> 
-
-<div id="paypal-container">
-    <div id="paypal-button-container"></div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=AZ7GhC2YboSaKchImw3DYAYpvu1yatQ-_hR5X4YN-pELuhpD6No5QB8aWbAuYMkCfMBJEuEeVsUxAmgZ&currency=MXN"></script>
-
-<script>
-    paypal.Buttons({
-       
-        locale: 'es_MX',
-        style: {
-            shape: 'pill', // Otras opciones: 'rect', 'label'
-            color: 'gold', // Otras opciones: 'blue', 'silver', 'black'
-            layout: 'vertical',  // Otras opciones: 'horizontal'
+      const callbacks = {
+        // Evento que permitirá saber que el token se creado de forma satisfactoria, es importante que se consuman los datos que de él derivan.
+        onCreateTokenSucceeded: function (token) {
+          console.log('token', token);
         },
-
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '10.00' // Monto dinámico 
-                    }
-                }]
-            });
+        // Evento que permitirá saber que el token se creado de manera incorrecta, es importante que se consuman los datos que de él derivan y se hagan las correciones pertinentes.
+        onCreateTokenError: function (error) {
+          console.log(error);
         },
-
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                // Redirigir a una página de éxito o mostrar confirmación
-                console.log('Transaction completed by ' + details.payer.name.given_name + '!'); 
-                window.location.href = 'pagina_exito.php'; 
-            });
+        // Evento que notifica cuando finalizó la carga del component/tokenizer
+        onGetInfoSuccess: function (loadingTime) {
+          console.log('loading time en milisegundos', loadingTime.initLoadTime);
         }
-
-    }).render('#paypal-button-container');
-</script>
-
-</body>
+      };
+      window.ConektaCheckoutComponents.Card({
+        config,
+        callbacks,
+        options
+      });
+    </script>
+  </body>
 </html>

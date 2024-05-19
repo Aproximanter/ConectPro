@@ -1,3 +1,4 @@
+<?php include('navbar.php')?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
     <title>Registrarse</title>
 </head>
 <body>
-<?php include('navbar.php')?> 
+
 
 <div class="container mt-5">
     <h2>Registro de Usuario</h2>
@@ -17,6 +18,10 @@
         <div class="mb-3">
             <label for="usuario" class="form-label">Usuario:</label>
             <input type="text" class="form-control" id="usuario" name="usuario" required>
+        </div>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
         </div>
         <div class="mb-3">
             <label for="correo" class="form-label">Correo Electrónico:</label>
@@ -27,8 +32,12 @@
             <input type="password" class="form-control" id="contrasena" name="contrasena" required>
         </div>
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
+            <label for="telefono" class="form-label">Teléfono:</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono">
+        </div>
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección:</label>
+            <input type="text" class="form-control" id="direccion" name="direccion">
         </div>
         <div class="mb-3">
             <label for="fotoPerfil" class="form-label">Foto de Perfil:</label>

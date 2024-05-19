@@ -4,9 +4,9 @@ session_start();
 
 // Configuración de la conexión a la base de datos
 $host = "localhost";
-$usuario_db = "root";
-$contrasena_db = "";
-$nombre_db = "conectpro";
+$usuario_db = "id21883336_admin";
+$contrasena_db = "A1274J&/Conect";
+$nombre_db = "id21883336_conectpro";
 
 // Conexión a la base de datos
 $conexion = new mysqli($host, $usuario_db, $contrasena_db, $nombre_db);
@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registro'])) {
     $correo = $_POST["correo"];
     $contrasena = password_hash($_POST["contrasena"], PASSWORD_DEFAULT); // Hash de la contraseña
     $nombre = $_POST["nombre"];
+    $telefono = $_POST["telefono"];
+    $direccion = $_POST["direccion"];
 
     // Manejar la foto de perfil
     if (isset($_FILES['fotoPerfil'])) {
@@ -32,22 +34,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registro'])) {
 
         // Mover la foto de perfil al directorio de destino
         if (move_uploaded_file($fotoTemp, $destino)) {
-            // Preparar la consulta SQL para insertar datos en la tabla usuarios
-            $sql = "INSERT INTO usuarios (Usuario, Correo, Contrasena, Nombre, FotoPerfil) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $conexion->prepare($sql);
+            // Iniciar una transacción
+            $conexion->begin_transaction();
 
-            // Vincular parámetros
-            $stmt->bind_param("sssss", $usuario, $correo, $contrasena, $nombre, $destino);
+            try {
+                // Preparar la consulta SQL para insertar datos en la tabla usuarios
+                $sql = "INSERT INTO usuarios (Usuario, Correo, Contrasena, Nombre, FotoPerfil) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $conexion->prepare($sql);
 
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                echo "<script>alert('Registro de usuario exitoso'); window.location.href='index.php';</script>";
-            } else {
-                echo "Error al registrar el usuario: " . $stmt->error;
+                // Vincular parámetros
+                $stmt->bind_param("sssss", $usuario, $correo, $contrasena, $nombre, $destino);
+
+                // Ejecutar la consulta
+                if ($stmt->execute()) {
+                    // Obtener el ID del usuario insertado
+                    $usuarioID = $stmt->insert_id;
+
+                    // Preparar la consulta SQL para insertar datos en la tabla datoscontactousuario
+                    $sql_contacto = "INSERT INTO datoscontactousuario (UsuarioID, Telefono, Correo, Direccion) VALUES (?, ?, ?, ?)";
+                    $stmt_contacto = $conexion->prepare($sql_contacto);
+
+                    // Vincular parámetros
+                    $stmt_contacto->bind_param("isss", $usuarioID, $telefono, $correo, $direccion);
+
+                    // Ejecutar la consulta
+                    if ($stmt_contacto->execute()) {
+                        // Confirmar la transacción
+                        $conexion->commit();
+                        echo "<script>alert('Registro de usuario exitoso'); window.location.href='index.php';</script>";
+                    } else {
+                        // Revertir la transacción en caso de error
+                        $conexion->rollback();
+                        echo "Error al registrar los datos de contacto del usuario: " . $stmt_contacto->error;
+                    }
+
+                    // Cerrar la consulta preparada para datos de contacto
+                    $stmt_contacto->close();
+                } else {
+                    // Revertir la transacción en caso de error
+                    $conexion->rollback();
+                    echo "Error al registrar el usuario: " . $stmt->error;
+                }
+
+                // Cerrar la consulta preparada para usuarios
+                $stmt->close();
+            } catch (Exception $e) {
+                // Revertir la transacción en caso de excepción
+                $conexion->rollback();
+                echo "Error: " . $e->getMessage();
             }
-
-            // Cerrar la conexión y liberar recursos
-            $stmt->close();
         } else {
             echo "Error al subir la foto de perfil.";
         }
@@ -91,4 +126,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['inicio_sesion'])) 
     // Cerrar la consulta preparada
     $stmt->close();
 }
+
+// Cerrar la conexión a la base de datos
+$conexion->close();
 ?>

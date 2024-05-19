@@ -12,29 +12,18 @@ if (!isset($_SESSION['UsuarioID'])) {
 
 // Obtener el UsuarioID desde la sesión
 $usuario_id = $_SESSION['UsuarioID'];
-
 if(isset($_POST['crear_profesionista'])) {
-    // Verificar si el usuario ya tiene un perfil de profesionista asociado
-    $sql_verificar = "SELECT ProfesionistaID FROM profesionistas WHERE UsuarioID = ?";
-    $stmt_verificar = mysqli_prepare($con, $sql_verificar);
-    mysqli_stmt_bind_param($stmt_verificar, "i", $usuario_id);
-    mysqli_stmt_execute($stmt_verificar);
-    $resultado_verificar = mysqli_stmt_get_result($stmt_verificar);
-
-    if(mysqli_num_rows($resultado_verificar) > 0) {
-        // El usuario ya tiene un perfil de profesionista asociado
-        echo "<script>alert('Ya tienes un perfil de profesionista asociado.'); window.location.href = 'index.php';</script>";
-        exit; // Salir del script
-    }
-
-    // Si el usuario no tiene un perfil de profesionista asociado, proceder con la creación del nuevo perfil
+    // Obtener los datos del formulario
     $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : '';
     $profesion = isset($_POST['profesion']) ? $_POST['profesion'] : '';
     $descripcion = isset($_POST['descripcion']) ? $_POST['descripcion'] : '';
-    $costo = isset($_POST['costo']) ? $_POST['costo'] : NULL; // Nuevo campo para el costo del servicio
+    $costo = isset($_POST['costo']) ? $_POST['costo'] : NULL;
+    $telefono = isset($_POST['telefono']) ? $_POST['telefono'] : '';
+    $correo = isset($_POST['correo']) ? $_POST['correo'] : '';
+    $direccion = isset($_POST['direccion']) ? $_POST['direccion'] : '';
 
     // Verificar si se proporcionaron todos los datos necesarios
-    if (!empty($nombre) && !empty($profesion) && !empty($descripcion) && isset($costo)) {
+    if (!empty($nombre) && !empty($profesion) && !empty($descripcion) && isset($costo) && !empty($telefono) && !empty($correo) && !empty($direccion)) {
         // Verificar si se cargó una foto de perfil
         if (isset($_FILES['foto_perfil'])) {
             $foto_nombre = $_FILES['foto_perfil']['name'];
@@ -44,27 +33,43 @@ if(isset($_POST['crear_profesionista'])) {
             // Mover la foto de perfil al directorio de destino
             if (move_uploaded_file($foto_temp, $destino)) {
                 // Insertar datos del profesionista y la foto de perfil en la base de datos
-                $sql = "INSERT INTO profesionistas (UsuarioID, Nombre, Profesion, Descripcion, FotoPerfil, Costo) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmt = mysqli_prepare($con, $sql);
-                mysqli_stmt_bind_param($stmt, "issssd", $usuario_id, $nombre, $profesion, $descripcion, $destino, $costo);
-                if (mysqli_stmt_execute($stmt)) {
-                    // Generar script JavaScript para mostrar una alerta y redireccionar
+                $sql_insert_profesionista = "INSERT INTO profesionistas (UsuarioID, Nombre, Profesion, Descripcion, FotoPerfil, Costo) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt_insert_profesionista = mysqli_prepare($con, $sql_insert_profesionista);
+                mysqli_stmt_bind_param($stmt_insert_profesionista, "issssd", $usuario_id, $nombre, $profesion, $descripcion, $destino, $costo);
+                
+                // Insertar datos de contacto del profesionista en la base de datos
+                $sql_insert_contacto = "INSERT INTO datoscontactoprofesionista (ProfesionistaID, Telefono, Correo, Direccion) VALUES (LAST_INSERT_ID(), ?, ?, ?)";
+                $stmt_insert_contacto = mysqli_prepare($con, $sql_insert_contacto);
+                mysqli_stmt_bind_param($stmt_insert_contacto, "sss", $telefono, $correo, $direccion);
+                
+                // Ejecutar ambas consultas dentro de una transacción
+                mysqli_begin_transaction($con);
+                $success = true;
+                if (!mysqli_stmt_execute($stmt_insert_profesionista) || !mysqli_stmt_execute($stmt_insert_contacto)) {
+                    $success = false;
+                    mysqli_rollback($con); // Deshacer la transacción en caso de error
+                }
+                mysqli_commit($con); // Confirmar la transacción si no hubo errores
+
+                if ($success) {
+                    // Mostrar un mensaje de éxito y redirigir
                     echo "<script>alert('Profesionista registrado exitosamente.'); window.location.href = 'index.php';</script>";
                 } else {
-                    // Generar script JavaScript para mostrar una alerta
+                    // Mostrar un mensaje de error
                     echo "<script>alert('Error al registrar el profesionista.');</script>";
                 }
             } else {
-                // Generar script JavaScript para mostrar una alerta
+                // Mostrar un mensaje de error
                 echo "<script>alert('Error al subir la foto de perfil.');</script>";
             }
         } else {
-            // Generar script JavaScript para mostrar una alerta
+            // Mostrar un mensaje de error
             echo "<script>alert('Por favor, seleccione una foto de perfil.');</script>";
         }
     } else {
-        // Generar script JavaScript para mostrar una alerta
-        echo "<script>alert('Por favor, complete todos los campos del formulario y asegúrese de proporcionar el costo del servicio.');</script>";
+        // Mostrar un mensaje de error
+        echo "<script>alert('Por favor, complete todos los campos del formulario y asegúrese de proporcionar el costo del servicio y los datos de contacto.');</script>";
     }
 }
+
 ?>

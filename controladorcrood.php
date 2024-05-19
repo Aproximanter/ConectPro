@@ -4,9 +4,9 @@ session_start();
 
 // Configuración de la conexión a la base de datos
 $host = "localhost";
-$usuario_db = "root";
-$contrasena_db = "";
-$nombre_db = "conectpro";
+$usuario_db = "id21883336_admin";
+$contrasena_db = "A1274J&/Conect";
+$nombre_db = "id21883336_conectpro";
 
 // Conexión a la base de datos
 $conexion = new mysqli($host, $usuario_db, $contrasena_db, $nombre_db);

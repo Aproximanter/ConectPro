@@ -4,15 +4,29 @@ include("conexion_bd.php");
 // Obtener la conexión a la base de datos
 $conexion = connection();
 
-// Manejar la acción de eliminación
-if(isset($_POST['action']) && $_POST['action'] == 'eliminar') {
+if (isset($_POST['action']) && $_POST['action'] == 'eliminar') {
     $usuarioID = $_POST['usuarioID'];
-    $sql = "DELETE FROM usuarios WHERE UsuarioID = $usuarioID";
-    if ($conexion->query($sql) === TRUE) {
+
+    // Agregar depuración para verificar que se recibe el ID
+    if (empty($usuarioID)) {
+        echo "Error: UsuarioID no recibido.";
+        exit();
+    }
+
+    $sql = "DELETE FROM usuarios WHERE UsuarioID = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $usuarioID);
+
+    if ($stmt->execute()) {
         echo "Usuario eliminado correctamente.";
     } else {
-        echo "Error al eliminar el usuario: " . $conexion->error;
+        echo "Error al eliminar el usuario: " . $stmt->error;
     }
-    exit(); // Terminar la ejecución del script después de la eliminación
+
+    $stmt->close();
+    $conexion->close();
+    exit();
+} else {
+    echo "Acción no válida.";
 }
 ?>
